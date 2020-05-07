@@ -1,3 +1,19 @@
+const getAirlineById = (id) => {
+    let foundAirline = airlines.find((airline) => {
+        if (airline.id === id) { return airline; }
+    });
+
+    return foundAirline.name;
+};
+
+const getAirportByCode = (code) => {
+    let foundAirport = airports.find((airport) => {
+        if (airport.code === code) { return airport; }
+    });
+
+    return foundAirport.name;
+};
+
 const routes = [
     {"airline":24,"src":"DFW","dest":"XNA"}, 
     {"airline":24,"src":"DFW","dest":"FWA"}, 
@@ -1395,4 +1411,4 @@ const airports = [
 
 ];
 
-export default {routes, airlines, airports};
+export default {getAirlineById, getAirportByCode, routes, airlines, airports};

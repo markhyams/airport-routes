@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
 class Table extends Component {
-  state = {
-    page: 1,
-  }
-
   startEnd = (page) => {
     const perPage = this.props.perPage || 25;
     const start = (page - 1) * perPage;
@@ -13,19 +9,15 @@ class Table extends Component {
   }
 
   nextClick = () => {
-    this.setState((prevState) => {
-      return { page: prevState.page + 1 }
-    })
+    this.props.onChangePage('increment')
   }
 
   prevClick = () => {
-    this.setState((prevState) => {
-      return { page: prevState.page - 1 }
-    })
+    this.props.onChangePage('decrement')
   }
 
   render() {
-    let [start, end] = this.startEnd(this.state.page);
+    let [start, end] = this.startEnd(this.props.page);
     const numberOfRows = this.props.rows.length;
     if (end > numberOfRows) { end = numberOfRows; }
 

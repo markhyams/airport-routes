@@ -27,6 +27,7 @@ class App extends Component {
   state = {
     airlineIdFilter: "",
     airportCodeFilter: "",
+    page: 1,
   }
 
   filterRoutesByAirline = (id, routes) => {
@@ -47,12 +48,29 @@ class App extends Component {
 
   onFilterAirlines = (e) => {
     const airlineIdFilter = Number(e.target.value);
-    this.setState({ airlineIdFilter })
+    const page = 1;
+    this.setState({ airlineIdFilter, page })
   }
 
   onFilterAirports = (e) => {
     const airportCodeFilter = e.target.value;
-    this.setState({ airportCodeFilter });
+    const page = 1;
+    this.setState({ airportCodeFilter, page });
+  }
+
+  handleChangePage = (action) => {
+    if (action === 'increment') {
+      this.setState((state) => ({ page: state.page + 1 }))
+    } else if (action === 'decrement') {
+      this.setState((state) => ({ page: state.page - 1 }))      
+    }
+  }
+
+  handleClear = () => {
+    this.setState({
+      airlineIdFilter: '',
+      airportCodeFilter: '',
+    });
   }
 
   render() {
@@ -72,7 +90,7 @@ class App extends Component {
             valueKey="id" 
             titleKey="name"
             allTitle="All Airlines"
-            value=""
+            value={this.state.airlineIdFilter}
             onSelect={this.onFilterAirlines} 
           />
           <Select 
@@ -80,17 +98,22 @@ class App extends Component {
             valueKey="code" 
             titleKey="name"
             allTitle="All Airports"
-            value=""
+            value={this.state.airportCodeFilter}
             onSelect={this.onFilterAirports} 
           />
+          <button
+            onClick={this.handleClear}
+          >Clear</button>
         </section>
         <section>
           <Table 
+            page={this.state.page}
             perPage={25}
             className="routes-table"
             columns={columns}
             rows={filteredRoutes}
             format={formatValue}
+            onChangePage={this.handleChangePage}
           />
         </section>
       </div>

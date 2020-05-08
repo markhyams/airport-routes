@@ -23,14 +23,45 @@ const formatValue = (property, value) => {
 }
 
 class App extends Component {
+  state = {
+    airlineIdFilter: "",
+  }
+
+  filterRoutesByAirline = (id) => {
+    if (!id) { return routes; }
+
+    return routes.filter((route) => {
+      return route.airline === id;
+    })
+  }
+
+  onFilterAirlines = (e) => {
+    const airlineIdFilter = Number(e.target.value);
+    this.setState({ airlineIdFilter })
+  }
+
   render() {
+    const routes = this.filterRoutesByAirline(this.state.airlineIdFilter)
+
     return (
       <div className="app">
         <header className="header">
           <h1 className="title">Airline Routes</h1>
         </header>
         <section>
+          <p>Filter:</p>
+          <select onChange={this.onFilterAirlines}>
+            <option value="">Choose an airline...</option>
+            {
+              airlines.map((airline) => (
+                <option key={airline.id} value={airline.id}>{airline.name}</option>
+              ))
+            }
+          </select>
+        </section>
+        <section>
           <Table 
+            perPage={25}
             className="routes-table"
             columns={columns}
             rows={routes}

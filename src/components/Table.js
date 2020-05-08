@@ -25,8 +25,9 @@ class Table extends Component {
   }
 
   render() {
-    const [start, end] = this.startEnd(this.state.page);
+    let [start, end] = this.startEnd(this.state.page);
     const numberOfRows = this.props.rows.length;
+    if (end > numberOfRows) { end = numberOfRows; }
 
     return (
       <div>
@@ -49,8 +50,8 @@ class Table extends Component {
         <thead>
           <tr>
             {
-              this.props.columns.map((col) => (
-                <th>{col.name}</th>
+              this.props.columns.map((col, idx) => (
+                <th key={`col-${idx}`}>{col.name}</th>
               ))
             }
           </tr>

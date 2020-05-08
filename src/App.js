@@ -3,6 +3,7 @@ import './App.css';
 
 import Data from './data.js';
 import Table from './components/Table.js';
+import Select from './components/Select.js';
 
 const { getAirlineById, getAirportByCode, routes, airlines, airports } = Data;
 
@@ -25,13 +26,22 @@ const formatValue = (property, value) => {
 class App extends Component {
   state = {
     airlineIdFilter: "",
+    airportCodeFilter: "",
   }
 
-  filterRoutesByAirline = (id) => {
+  filterRoutesByAirline = (id, routes) => {
     if (!id) { return routes; }
 
     return routes.filter((route) => {
       return route.airline === id;
+    })
+  }
+
+  filterRoutesByAirport = (code, routes) => {
+    if (!code) { return routes; }
+
+    return routes.filter((route) => {
+      return route.src === code || route.dest === code;
     })
   }
 
@@ -40,8 +50,15 @@ class App extends Component {
     this.setState({ airlineIdFilter })
   }
 
+  onFilterAirports = (e) => {
+    const airportCodeFilter = e.target.value;
+    this.setState({ airportCodeFilter });
+  }
+
   render() {
-    const routes = this.filterRoutesByAirline(this.state.airlineIdFilter)
+    let filteredRoutes = this.filterRoutesByAirline(this.state.airlineIdFilter, routes)
+    filteredRoutes = this.filterRoutesByAirport(this.state.airportCodeFilter, filteredRoutes)
+    const filteredAirlines = airlines;
 
     return (
       <div className="app">
@@ -50,21 +67,29 @@ class App extends Component {
         </header>
         <section>
           <p>Filter:</p>
-          <select onChange={this.onFilterAirlines}>
-            <option value="">Choose an airline...</option>
-            {
-              airlines.map((airline) => (
-                <option key={airline.id} value={airline.id}>{airline.name}</option>
-              ))
-            }
-          </select>
+          <Select 
+            options={filteredAirlines}
+            valueKey="id" 
+            titleKey="name"
+            allTitle="All Airlines"
+            value=""
+            onSelect={this.onFilterAirlines} 
+          />
+          <Select 
+            options={airports}
+            valueKey="code" 
+            titleKey="name"
+            allTitle="All Airports"
+            value=""
+            onSelect={this.onFilterAirports} 
+          />
         </section>
         <section>
           <Table 
             perPage={25}
             className="routes-table"
             columns={columns}
-            rows={routes}
+            rows={filteredRoutes}
             format={formatValue}
           />
         </section>

@@ -46,6 +46,29 @@ class App extends Component {
     })
   }
 
+  isUnfiltered = () => (!this.state.airlineIdFilter && !this.state.airportCodeFilter)
+
+  filterSelectAirlines = (routes) => {
+    if (this.isUnfiltered()) { return airlines; }
+    return airlines.map((airline) => {
+      const disabled = routes.every((route) => {
+        return route.airline !== airline.id
+      })
+      return Object.assign({}, airline, { disabled })
+    })
+  }
+
+  filterSelectAirports = (routes) => {
+    if (this.isUnfiltered()) { return airports; }
+    return airports.map((airport) => {
+      const disabled = routes.every((route) => {
+        return route.src !== airport.code &&
+                route.dest !== airport.code;
+      })
+      return Object.assign({}, airport, { disabled })
+    })
+  }
+
   onFilterAirlines = (e) => {
     const airlineIdFilter = Number(e.target.value);
     const page = 1;
@@ -76,7 +99,8 @@ class App extends Component {
   render() {
     let filteredRoutes = this.filterRoutesByAirline(this.state.airlineIdFilter, routes)
     filteredRoutes = this.filterRoutesByAirport(this.state.airportCodeFilter, filteredRoutes)
-    const filteredAirlines = airlines;
+    const filteredAirlines = this.filterSelectAirlines(filteredRoutes);
+    const filteredAirports = this.filterSelectAirports(filteredRoutes);
 
     return (
       <div className="app">
@@ -84,7 +108,7 @@ class App extends Component {
           <h1 className="title">Airline Routes</h1>
         </header>
         <section>
-          <p>Filter:</p>
+          <span>Show routes on:</span>
           <Select 
             options={filteredAirlines}
             valueKey="id" 
@@ -93,8 +117,9 @@ class App extends Component {
             value={this.state.airlineIdFilter}
             onSelect={this.onFilterAirlines} 
           />
+          <span>flying in or out of</span>
           <Select 
-            options={airports}
+            options={filteredAirports}
             valueKey="code" 
             titleKey="name"
             allTitle="All Airports"
@@ -103,7 +128,8 @@ class App extends Component {
           />
           <button
             onClick={this.handleClear}
-          >Clear</button>
+            disabled={!this.state.airlineIdFilter && !this.state.airportCodeFilter}
+          >Clear Filters</button>
         </section>
         <section>
           <Table 

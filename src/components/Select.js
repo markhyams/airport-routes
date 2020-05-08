@@ -10,7 +10,13 @@ class Select extends Component {
         <option value="">{this.props.allTitle}</option>
         {
           this.props.options.map((option) => (
-            <option key={option[this.props.valueKey]} value={option[this.props.valueKey]}>{option[this.props.titleKey]}</option>
+            <option 
+              key={option[this.props.valueKey]}
+              value={option[this.props.valueKey]}
+              disabled={option.disabled}
+            >
+              {option[this.props.titleKey]}
+            </option>
           ))
         }
       </select>

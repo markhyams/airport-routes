@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
 
-class Select extends Component {
-  render() {
+function Select({ value, onSelect, allTitle, options, titleKey, valueKey }) {
+  // render() {
     return (
       <select 
-        value={this.props.value}
-        onChange={this.props.onSelect}
+        value={value}
+        onChange={onSelect}
       >
-        <option value="">{this.props.allTitle}</option>
+        <option value="">{allTitle}</option>
         {
-          this.props.options.map((option) => (
+          options.map((option) => (
             <option 
-              key={option[this.props.valueKey]}
-              value={option[this.props.valueKey]}
+              key={option[valueKey]}
+              value={option[valueKey]}
               disabled={option.disabled}
             >
-              {option[this.props.titleKey]}
+              {option[titleKey]}
             </option>
           ))
         }
       </select>
     )
-  }
+  // }
 }
 
 export default Select;

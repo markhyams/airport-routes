@@ -63,10 +63,10 @@ svg circle.destination {
   stroke: red;
   stroke-width: .3;
   fill: transparent;
-  r: 0.8;
+  r: 0.9;
 }
 
 svg circle.source {
   fill: lightgreen;
-  r: 0.5;
+  r: 0.75;
 }

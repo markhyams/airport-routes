@@ -4,6 +4,7 @@ import './App.css';
 import Data from './data.js';
 import Table from './components/Table.js';
 import Select from './components/Select.js';
+import Map from './components/Map.js';
 
 const { getAirlineById, getAirportByCode, routes, airlines, airports } = Data;
 
@@ -17,7 +18,7 @@ const formatValue = (property, value) => {
   if (property === 'airline') {
     return getAirlineById(value);
   } else if (property === 'src' || property === 'dest') {
-    return getAirportByCode(value);
+    return getAirportByCode(value).name;
   } else {
     return '';
   }
@@ -76,7 +77,13 @@ class App extends Component {
   }
 
   onFilterAirports = (e) => {
-    const airportCodeFilter = e.target.value;
+    const airportCodeFilter = e.target.dataset.code || e.target.value;
+    const page = 1;
+    this.setState({ airportCodeFilter, page });
+  }
+
+  handleMapClick = (e) => {
+    const airportCodeFilter = e.target.dataset.code;
     const page = 1;
     this.setState({ airportCodeFilter, page });
   }
@@ -107,6 +114,13 @@ class App extends Component {
         <header className="header">
           <h1 className="title">Airline Routes</h1>
         </header>
+        <section>
+          <Map 
+            routes={filteredRoutes}
+            airportIndex={getAirportByCode}
+            onMapClick={this.onFilterAirports}
+          />
+        </section>
         <section>
           <span>Show routes on:</span>
           <Select 

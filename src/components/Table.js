@@ -38,7 +38,7 @@ class Table extends Component {
             Next Page
           </button>
         </p>
-        <table>
+        <table className='routes-table'>
         <thead>
           <tr>
             {

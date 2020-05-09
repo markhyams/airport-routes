@@ -1419,7 +1419,7 @@ const getAirlineById = (id) => {
 };
 
 const getAirportByCode = (code) => {
-    return airportsIndex[code].name;
+    return airportsIndex[code];
 };
 
 export default { getAirlineById, getAirportByCode, routes, airlines, airports };
